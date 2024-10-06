@@ -24,7 +24,7 @@ import { UserService } from "../services/user.service";
 import { DataResponse } from "src/common/constants/http/response";
 import { UserResourceIncludeGuard } from "../gaurds/userInc.guard";
 import { AuthService } from "../services/auth.service";
-const bcrypt = require("bcryptjs");
+import * as bcrypt from "bcrypt";
 @Controller("users")
 export class UserController {
   constructor(
@@ -73,10 +73,15 @@ export class UserController {
       value: body.value,
     });
     if (!user) {
-      return CommonExceptions.INVALID_CREDENTIALS("email or mobile");
+      throw CommonExceptions.INVALID_CREDENTIALS("email or mobile");
     }
-    if (!bcrypt.compare(user.password, body.password))
-      CommonExceptions.INVALID_CREDENTIALS("password");
+    console.log(
+      await bcrypt.compare(body.password, user.password),
+      user.password,
+      body.password
+    );
+    if (!(await bcrypt.compare(body.password, user.password)))
+      throw CommonExceptions.INVALID_CREDENTIALS("password");
     const accessToken = await this.authService.generateToken({
       userId: user.id,
     });

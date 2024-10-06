@@ -50,6 +50,7 @@ export class UserFilterObject {
     email: true,
     mobile: true,
     roleId: true,
+    accessToken: true,
     ...this.userIncludeObject,
   };
   firstUpperCase(s: string) {

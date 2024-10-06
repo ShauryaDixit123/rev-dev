@@ -33,6 +33,8 @@ export class AccessMiddleware implements NestMiddleware {
       const userDetails = await this.usersRepo.getUserById({
         id: decodedTkn["userId"],
       });
+      if (userDetails.accessToken !== accessToken)
+        throw CommonExceptions.TOKEN_EXPIRED;
       const resc: string = req.headers["resource"];
       const act = parseInt(req.headers["action"]);
       const atb: {

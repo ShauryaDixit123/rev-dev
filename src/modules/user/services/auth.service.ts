@@ -205,7 +205,7 @@ export class AuthService {
   async createTokenForUser(params: { userId: string }) {
     const tkn = await this.generateToken({ userId: params.userId });
     const ud = await this.usersRepo.getUserById({ id: params.userId });
-    this.usersRepo.updateUser({ accessToken: tkn, email: ud.email });
+    await this.usersRepo.updateUser({ accessToken: tkn, email: ud.email });
     return tkn;
   }
 }

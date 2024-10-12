@@ -26,7 +26,9 @@ export class AccessMiddleware implements NestMiddleware {
       if (!accessToken) {
         throw CommonExceptions.INVALID_ACCESS_TOKEN;
       }
-      const decodedTkn = this.authService.verifyToken({ token: accessToken });
+      const decodedTkn = await this.authService.verifyToken({
+        token: accessToken,
+      });
       if (!decodedTkn.valid) {
         throw CommonExceptions.TOKEN_EXPIRED;
       } // FE WILL GET 303 ERROR IF TOKEN IS NOT VALID AND LATER HAS TO REQUEST WITH THIS EXPIRED TOKEN TO GET NEW ONE

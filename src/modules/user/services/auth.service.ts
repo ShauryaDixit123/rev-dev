@@ -186,20 +186,24 @@ export class AuthService {
       expiresIn: this.configService.get("JWT_TTL"),
     });
   }
-  verifyToken(params: { token: string }) {
-    const now = Math.floor(Date.now() / 1000);
-    const decoded = jwt.verify(
-      params.token,
-      this.configService.get("JWT_SECRET")
-    ) as jwt.JwtPayload;
-    if (!decoded) {
+  async verifyToken(params: { token: string }) {
+    try {
+      const now = Math.floor(Date.now() / 1000);
+      const decoded = jwt.verify(
+        params.token,
+        this.configService.get("JWT_SECRET")
+      ) as jwt.JwtPayload;
+      if (!decoded) {
+        return { ...decoded, valid: false };
+      }
+      if (decoded.exp <= now) {
+        return { ...decoded, valid: false };
+      }
+      return { ...decoded, valid: true };
+    } catch (e) {
+      const decoded = jwt.decode(params.token) as jwt.JwtPayload;
       return { ...decoded, valid: false };
     }
-    console.log(decoded, "cmcmcmmc");
-    if (decoded.exp <= now) {
-      return { ...decoded, valid: false };
-    }
-    return { ...decoded, valid: true };
   }
 
   async createTokenForUser(params: { userId: string }) {

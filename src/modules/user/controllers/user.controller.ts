@@ -91,9 +91,10 @@ export class UserController {
   @Get("/login/:token")
   async getNewToken(@Param() params: { token: string }) {
     const decoded = await this.authService.verifyToken(params);
-    return await this.authService.createTokenForUser({
-      userId: decoded["userId"],
-    });
+    if (!decoded.valid)
+      return await this.authService.createTokenForUser({
+        userId: decoded["userId"],
+      });
   }
 
   @Post("/list")

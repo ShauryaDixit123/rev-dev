@@ -22,7 +22,6 @@ import {
 } from "../interfaces/draft.interface";
 
 @Controller("books/draft")
-@UseGuards(BookUserMapIncludeGuard)
 export class DraftController {
   constructor(
     private readonly draftService: DraftService,
@@ -54,6 +53,7 @@ export class DraftController {
     });
     return { signedURL, id: doc.id };
   }
+  @UseGuards(BookUserMapIncludeGuard)
   @Post("/prepare")
   async prepareDraft(
     @Body()
@@ -77,6 +77,7 @@ export class DraftController {
       parentBkManuId: body.parentId,
     });
   }
+  @UseGuards(BookUserMapIncludeGuard)
   @Put("/manuscript/:mid")
   async updateManuscript(
     @Param()
@@ -124,6 +125,7 @@ export class DraftController {
     });
     return { page: pgN, manuscript: ms };
   }
+  @UseGuards(BookUserMapIncludeGuard)
   @Get("/manuscript/:mid/:page")
   async getManuscriptById(@Param() params: { mid: string; page: number }) {
     let pg = await this.draftRepo.getManuscriptPage({

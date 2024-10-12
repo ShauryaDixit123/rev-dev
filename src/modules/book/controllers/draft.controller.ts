@@ -53,7 +53,7 @@ export class DraftController {
     });
     return { signedURL, id: doc.id };
   }
-  @UseGuards(BookUserMapIncludeGuard)
+  // @UseGuards(BookUserMapIncludeGuard)
   @Post("/prepare")
   async prepareDraft(
     @Body()

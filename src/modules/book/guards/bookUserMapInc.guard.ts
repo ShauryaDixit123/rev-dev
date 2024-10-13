@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  Logger,
-} from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { BooksRepository } from "../repositories/book.repository";
 import { CommonExceptions } from "src/common/constants/status";
 
@@ -26,7 +21,8 @@ export class BookUserMapIncludeGuard implements CanActivate {
       _dependencyResource_Part
     );
     if (
-      _dependencyResource === "bookUserMap" &&
+      (_dependencyResource === "bookUserMap" ||
+        _dependencyResource === "book") &&
       _dependencyResource_Part === "isIncluded"
     ) {
       const { bookId } = accessPayload;

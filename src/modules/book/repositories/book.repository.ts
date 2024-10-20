@@ -10,10 +10,14 @@ import {
 } from "../interfaces/book.interface";
 import { Prisma } from "@prisma/client";
 import { prismaErrorMapper } from "src/common/mappers/prisma";
+import { UserFilterObject } from "src/modules/user/constants/filterObjects";
 
 @Injectable()
 export class BooksRepository {
-  constructor(private readonly dbClient: DbClient) {}
+  constructor(
+    private readonly dbClient: DbClient,
+    private readonly userFilterObj: UserFilterObject
+  ) {}
   async createBook(params: createBookI) {
     const { bookUsers, createdBy, draftImageId, ...rest } = params;
     try {
@@ -82,6 +86,15 @@ export class BooksRepository {
     return this.dbClient.book.findFirst({
       where: { id: params.id },
       include: {
+        BookUserMap: {
+          include: {
+            User: {
+              select: {
+                ...this.userFilterObj.userSelectWithoutAccessTokenObject,
+              },
+            },
+          },
+        },
         BookStage: {
           ...(params.stageId && {
             where: {

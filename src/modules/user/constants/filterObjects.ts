@@ -53,6 +53,15 @@ export class UserFilterObject {
     accessToken: true,
     ...this.userIncludeObject,
   };
+  userSelectWithoutAccessTokenObject: Prisma.UserSelect = {
+    id: true,
+    firstName: true,
+    lastName: true,
+    email: true,
+    mobile: true,
+    roleId: true,
+    ...this.userIncludeObject,
+  };
   firstUpperCase(s: string) {
     return s
       .split("")

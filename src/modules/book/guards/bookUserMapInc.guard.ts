@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { BooksRepository } from "../repositories/book.repository";
 import { CommonExceptions } from "src/common/constants/status";
+import { GOD__VIEW_ROLES } from "src/modules/user/constants/roles";
 
 @Injectable()
 export class BookUserMapIncludeGuard implements CanActivate {
@@ -32,6 +33,9 @@ export class BookUserMapIncludeGuard implements CanActivate {
       });
       console.log("herhehrherh1e", bk);
       if (bk) return true;
+    }
+    if (GOD__VIEW_ROLES.includes(reqContext["userDetails"]?.roleId)) {
+      return true;
     }
     console.log("herhehrherhe");
     throw CommonExceptions.ACCESS_NOT_ALLOWED;

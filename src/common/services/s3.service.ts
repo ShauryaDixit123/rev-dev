@@ -51,11 +51,9 @@ export class S3Service {
     return signedUrl;
   }
 
-  async uploadBlobToS3(
-    s3Path: string,
-    blob: ArrayBuffer,
-    bucket = this.configService.get("AWS_S3_BUCKET_NAME")
-  ) {
+  async uploadBlobToS3(params: { s3Path: string; blob: ArrayBuffer }) {
+    const { s3Path, blob } = params;
+    const bucket = this.configService.get("AWS_S3_BUCKET_NAME");
     await this.s3.upload({
       ACL: "public-read",
       Bucket: bucket,

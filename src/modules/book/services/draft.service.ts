@@ -4,6 +4,9 @@ import { ImagesRepository } from "src/modules/project/repositories/image.reposit
 import { uploadImageI } from "../interfaces/book.interface";
 import axios from "axios";
 import { convertToHtml } from "mammoth";
+import fs from "fs";
+import juice from "juice";
+import * as htmlDocx from "html-docx-js";
 import { ConfigService } from "@nestjs/config";
 import { DraftRepository } from "../repositories/draft.repository";
 import { BOOK_STAGE_TREE } from "../constants/stage";
@@ -136,6 +139,26 @@ export class DraftService {
       mid: msD.parentId,
       page: body.page,
     });
+  }
+  async getOGManuscriptPageCount(body: { mid: string }) {
+    const ms = await this.draftRepo.getBookStageManucriptById({
+      id: body.mid,
+    });
+    return {
+      count: await this.draftRepo.getOGManuscriptPageCountByStageId({
+        bkStgId: ms.bkStgId,
+      }),
+      manuscript: ms,
+    };
+  }
+  async convertHtmlToWord(htmlArray: string[]): Promise<void> {
+    try {
+      const inlinedHtmlArray = htmlArray.map((html) => juice(html));
+      const combinedHtml = inlinedHtmlArray.join("<br>");
+      return htmlDocx.asBlob(combinedHtml);
+    } catch (error) {
+      console.error("Error converting HTML to Word document:", error);
+    }
   }
 }
 // post api for bk mansc; if issubm then create new manu or else start editing in it.

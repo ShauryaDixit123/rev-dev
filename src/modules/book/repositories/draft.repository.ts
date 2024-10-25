@@ -82,4 +82,14 @@ export class DraftRepository {
       },
     });
   }
+  async getOGManuscriptPageCountByStageId(params: { bkStgId: string }) {
+    return this.dbClient.bookStageManuscriptPage.count({
+      where: {
+        BookStageManuscript: {
+          bkStgId: params.bkStgId,
+          parentId: null,
+        },
+      },
+    });
+  }
 }

@@ -20,12 +20,14 @@ import {
   addPageContentBodyI,
   addPageContentParamsI,
 } from "../interfaces/draft.interface";
+import { S3Service } from "src/common/services/s3.service";
 
 @Controller("books/draft")
 export class DraftController {
   constructor(
     private readonly draftService: DraftService,
-    private readonly draftRepo: DraftRepository
+    private readonly draftRepo: DraftRepository,
+    private readonly s3Service: S3Service
   ) {}
   @Post("/presigned")
   async uploadBookDraft(
@@ -136,5 +138,30 @@ export class DraftController {
       pg = await this.draftService.getRecursPageManuscript(params);
     }
     return pg;
+  }
+  @UseGuards(BookUserMapIncludeGuard)
+  @Get("/manuscript/download/:mid")
+  async downloadManuscript(@Param("mid") mid: string) {
+    const arr = [];
+    const { count, manuscript } =
+      await this.draftService.getOGManuscriptPageCount({ mid });
+    for (let i = 0; i < count; i++) {
+      arr.push(
+        await this.draftService.getRecursPageManuscript({
+          mid,
+          page: i,
+        })?.content
+      );
+    }
+    const blob: any = await this.draftService.convertHtmlToWord(arr);
+    const s3Path = `${ProjectPaths.S3_BOOK_DRAFT_MANUSCRIPT_IMG}/manuscript/${manuscript.BookStage.stageId}/${manuscript.id}`;
+    await this.s3Service.uploadBlobToS3({
+      s3Path,
+      blob,
+    });
+    return await this.s3Service.getPresignedURL({
+      path: s3Path,
+      mimeType: ".docx",
+    });
   }
 }

@@ -145,4 +145,8 @@ export class UserController {
       throw new MessageError(e);
     }
   }
+  @Get("/:id")
+  async get(@Param("id") id: string) {
+    return this.usersRepo.getUserById({ id });
+  }
 }

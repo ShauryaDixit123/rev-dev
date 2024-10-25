@@ -1,11 +1,19 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from "@nestjs/common";
 import { BooksRepository } from "../repositories/book.repository";
 import { CommonExceptions } from "src/common/constants/status";
 import { GOD__VIEW_ROLES } from "src/modules/user/constants/roles";
 
 @Injectable()
 export class BookUserMapIncludeGuard implements CanActivate {
-  constructor(private readonly booksRepo: BooksRepository) {}
+  constructor(
+    private readonly logger: Logger,
+    private readonly booksRepo: BooksRepository
+  ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const accessPayload = request.headers["accesspayload"]
@@ -31,13 +39,13 @@ export class BookUserMapIncludeGuard implements CanActivate {
         userId: userDetails.id,
         bookId,
       });
-      console.log("herhehrherh1e", bk);
+      this.logger.log("book include", bk);
       if (bk) return true;
     }
     if (GOD__VIEW_ROLES.includes(reqContext["userDetails"]?.roleId)) {
       return true;
     }
-    console.log("herhehrherhe");
+    this.logger.log("thrown out!");
     throw CommonExceptions.ACCESS_NOT_ALLOWED;
   }
 }

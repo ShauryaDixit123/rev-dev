@@ -58,58 +58,58 @@ export class AccessMiddleware implements NestMiddleware {
         attribute: atb,
       });
       this.logger.log(rescInfo, "Resources of user!");
-      if (
-        !atb &&
-        (rescInfo.ResourceAction.length === 0 ||
-          (rescInfo.ResourceAction?.[0]?.ResourceActionPermission.length ===
-            0 &&
-            rescInfo.ResourceAction[0]?.ResourceActionDepend.length === 0))
-      ) {
-        throw CommonExceptions.ACCESS_NOT_ALLOWED;
-      }
-      if (
-        atb &&
-        rescInfo.ResourceAttribute?.[0]?.ResourceAttributeAction?.[0]
-          ?.ResourceAttributeActionPermission.length === 0 &&
-        rescInfo.ResourceAttribute?.[0]?.ResourceAttributeAction?.[0]
-          ?.ResourceAttributeActionDepend.length === 0
-      ) {
-        throw CommonExceptions.ACCESS_NOT_ALLOWED;
-      }
-      if (rescInfo.ResourceAction.length > 0) {
-        if (rescInfo.ResourceAction[0]?.ResourceActionDepend.length > 0) {
-          await this.authService.resolveDependsPermissions({
-            action: act,
-            depends: rescInfo.ResourceAction?.[0].ResourceActionDepend,
-            permissions:
-              rescInfo.ResourceAction?.[0].ResourceActionPermission[0],
-          });
-        }
-        if (
-          rescInfo.ResourceAction?.[0]?.ResourceActionPermission.length > 0 &&
-          rescInfo.ResourceAction[0]?.ResourceActionDepend.length === 0
-        ) {
-          await this.authService.flagForResources({
-            permission: rescInfo.ResourceAction[0].ResourceActionPermission[0],
-            resource: rescInfo.name,
-          });
-        }
-        if (
-          atb &&
-          rescInfo.ResourceAttribute?.[0].ResourceAttributeAction?.[0]
-            .ResourceAttributeActionPermission.length > 0 &&
-          rescInfo.ResourceAttribute?.[0].ResourceAttributeAction?.[0]
-            ?.ResourceAttributeActionDepend.length === 0
-        ) {
-          await this.authService.flagForResources({
-            permission: {
-              ...rescInfo.ResourceAttribute?.[0].ResourceAttributeAction?.[0]
-                .ResourceAttributeActionPermission,
-              roleId: userDetails.roleId,
-            },
-          });
-        }
-      }
+      // if (
+      //   !atb &&
+      //   (rescInfo.ResourceAction.length === 0 ||
+      //     (rescInfo.ResourceAction?.[0]?.ResourceActionPermission.length ===
+      //       0 &&
+      //       rescInfo.ResourceAction[0]?.ResourceActionDepend.length === 0))
+      // ) {
+      //   throw CommonExceptions.ACCESS_NOT_ALLOWED;
+      // }
+      // if (
+      //   atb &&
+      //   rescInfo.ResourceAttribute?.[0]?.ResourceAttributeAction?.[0]
+      //     ?.ResourceAttributeActionPermission.length === 0 &&
+      //   rescInfo.ResourceAttribute?.[0]?.ResourceAttributeAction?.[0]
+      //     ?.ResourceAttributeActionDepend.length === 0
+      // ) {
+      //   throw CommonExceptions.ACCESS_NOT_ALLOWED;
+      // }
+      // if (rescInfo.ResourceAction.length > 0) {
+      //   if (rescInfo.ResourceAction[0]?.ResourceActionDepend.length > 0) {
+      //     await this.authService.resolveDependsPermissions({
+      //       action: act,
+      //       depends: rescInfo.ResourceAction?.[0].ResourceActionDepend,
+      //       permissions:
+      //         rescInfo.ResourceAction?.[0].ResourceActionPermission[0],
+      //     });
+      //   }
+      //   if (
+      //     rescInfo.ResourceAction?.[0]?.ResourceActionPermission.length > 0 &&
+      //     rescInfo.ResourceAction[0]?.ResourceActionDepend.length === 0
+      //   ) {
+      //     await this.authService.flagForResources({
+      //       permission: rescInfo.ResourceAction[0].ResourceActionPermission[0],
+      //       resource: rescInfo.name,
+      //     });
+      //   }
+      //   if (
+      //     atb &&
+      //     rescInfo.ResourceAttribute?.[0].ResourceAttributeAction?.[0]
+      //       .ResourceAttributeActionPermission.length > 0 &&
+      //     rescInfo.ResourceAttribute?.[0].ResourceAttributeAction?.[0]
+      //       ?.ResourceAttributeActionDepend.length === 0
+      //   ) {
+      //     await this.authService.flagForResources({
+      //       permission: {
+      //         ...rescInfo.ResourceAttribute?.[0].ResourceAttributeAction?.[0]
+      //           .ResourceAttributeActionPermission,
+      //         roleId: userDetails.roleId,
+      //       },
+      //     });
+      //   }
+      // }
       this.logger.debug("hehrherhehrhe5", req.headers);
       req["context"] = {
         ...req["context"],

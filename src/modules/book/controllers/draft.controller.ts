@@ -79,7 +79,7 @@ export class DraftController {
       parentBkManuId: body.parentId,
     });
   }
-  @UseGuards(BookUserMapIncludeGuard)
+  // @UseGuards(BookUserMapIncludeGuard)
   @Put("/manuscript/:mid")
   async updateManuscript(
     @Param()

@@ -127,7 +127,7 @@ export class DraftController {
     });
     return { page: pgN, manuscript: ms };
   }
-  @UseGuards(BookUserMapIncludeGuard)
+  // @UseGuards(BookUserMapIncludeGuard)
   @Get("/manuscript/:mid/:page")
   async getManuscriptById(@Param() params: { mid: string; page: number }) {
     let pg = await this.draftRepo.getManuscriptPage({
@@ -139,7 +139,7 @@ export class DraftController {
     }
     return pg;
   }
-  @UseGuards(BookUserMapIncludeGuard)
+  // @UseGuards(BookUserMapIncludeGuard)
   @Get("/manuscript/download/:mid")
   async downloadManuscript(@Param("mid") mid: string) {
     const arr = [];

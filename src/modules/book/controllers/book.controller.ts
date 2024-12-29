@@ -106,7 +106,7 @@ export class BookController {
   }
 
   @Get("/:id")
-  @UseGuards(BookUserMapIncludeGuard)
+  // @UseGuards(BookUserMapIncludeGuard)
   async getBookById(
     @Param() params: { id: string },
     @Query() query: { stage: string }
@@ -134,7 +134,7 @@ export class BookController {
     return this.booksRepo.addBookStageDetails({ ...body, stageId: stgD.id });
   }
   @Put("/:id/stage/:stage")
-  @UseGuards(BookUserMapIncludeGuard)
+  // @UseGuards(BookUserMapIncludeGuard)
   async updateBookStage(
     @Param()
     params: bookIdStageParamsI,
@@ -151,7 +151,7 @@ export class BookController {
     });
   }
   @Get("/stage/:id")
-  @UseGuards(BookUserMapIncludeGuard)
+  // @UseGuards(BookUserMapIncludeGuard)
   async getBookStageDetails(@Param() params: { id: string }) {
     return await this.booksRepo.getBookStageById({ id: params.id });
   }
